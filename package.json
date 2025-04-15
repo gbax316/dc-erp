@@ -1,0 +1,40 @@
+{
+  "name": "dc-erp",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "dev:frontend": "turbo run dev --filter=church-frontend",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "setup:win": "powershell -ExecutionPolicy Bypass -File .\\scripts\\dev-setup.ps1",
+    "setup:unix": "bash ./scripts/dev-setup.sh",
+    "setup": "node -e \"process.platform === 'win32' ? require('child_process').execSync('npm run setup:win', {stdio: 'inherit'}) : require('child_process').execSync('npm run setup:unix', {stdio: 'inherit'})\""
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/bootstrap": "^5.2.10",
+    "@types/nodemailer": "^6.4.17",
+    "eslint": "^8.56.0",
+    "prettier": "^3.1.1",
+    "turbo": "^2.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "packageManager": "npm@10.2.3",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "bootstrap": "^5.3.5",
+    "nodemailer": "^6.10.1"
+  }
+}

@@ -1,0 +1,42 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: ./apps/backend/Dockerfile
+    command: node dist/main
+    environment:
+      - NODE_ENV=production
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=dc_erp
+    ports:
+      - "4001:4000"
+
+  admin:
+    build:
+      context: .
+      dockerfile: ./apps/admin/Dockerfile
+    env_file:
+      - ./apps/admin/.env
+    environment:
+      - VITE_API_URL=http://backend:4000
+
+  admin-dashboard:
+    env_file:
+      - ./apps/admin-dashboard/.env.production
+    environment:
+      - VITE_API_URL=http://backend:4000
+
+  frontend:
+    env_file:
+      - ./apps/frontend/.env
+    environment:
+      - NEXT_PUBLIC_API_URL=http://backend:4000
+
+  public:
+    env_file:
+      - ./apps/public/.env
+    environment:
+      - NEXT_PUBLIC_API_URL=http://backend:4000 

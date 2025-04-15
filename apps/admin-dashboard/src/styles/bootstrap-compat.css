@@ -1,0 +1,154 @@
+/**
+ * Bootstrap and Tailwind Compatibility Layer
+ * This file contains utility classes that help reconcile differences
+ * between Tailwind and Bootstrap, allowing for graceful degradation
+ */
+
+/* Utility classes for custom theme colors in Bootstrap context */
+.bg-primary {
+  background-color: var(--bs-primary, #0A1D56) !important;
+}
+
+.bg-primary-50 {
+  background-color: rgba(10, 29, 86, 0.05) !important;
+}
+
+.bg-primary-100 {
+  background-color: rgba(10, 29, 86, 0.1) !important;
+}
+
+.text-primary {
+  color: var(--bs-primary, #0A1D56) !important;
+}
+
+/* Override Tailwind preflight styles that conflict with Bootstrap */
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+  margin: 0;
+}
+
+/* Bootstrap card enhancements to work with our theme */
+.card {
+  border-radius: 1rem !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+  transition: all 0.3s ease !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+.card:hover.hover\:shadow-soft-lg {
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.05), 0 4px 6px rgba(0, 0, 0, 0.05) !important;
+}
+
+.card-header {
+  background-color: transparent !important;
+  border-bottom-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Custom button styles that blend both systems */
+.btn-primary {
+  background-color: var(--bs-primary, #0A1D56) !important;
+  border-color: var(--bs-primary, #0A1D56) !important;
+}
+
+.btn-primary:hover {
+  background-color: rgba(10, 29, 86, 0.9) !important;
+  border-color: rgba(10, 29, 86, 0.9) !important;
+}
+
+/* Ensure our navbar styling is consistent */
+.navbar {
+  padding-top: 0.75rem !important;
+  padding-bottom: 0.75rem !important;
+}
+
+.navbar-toggler:focus {
+  box-shadow: 0 0 0 0.25rem rgba(10, 29, 86, 0.25) !important;
+}
+
+.navbar-toggler {
+  color: var(--bs-primary, #0A1D56) !important;
+}
+
+.nav-link {
+  color: #6c757d !important;
+  transition: color 0.2s ease-in-out !important;
+}
+
+.nav-link:hover {
+  color: var(--bs-primary, #0A1D56) !important;
+}
+
+.nav-link.active, 
+.nav-link.text-primary {
+  color: var(--bs-primary, #0A1D56) !important;
+  font-weight: 500 !important;
+}
+
+/* Ensure form elements have consistent styling */
+.form-control:focus,
+.form-select:focus {
+  border-color: rgba(10, 29, 86, 0.5) !important;
+  box-shadow: 0 0 0 0.25rem rgba(10, 29, 86, 0.25) !important;
+}
+
+/* Fix conflicts between Tailwind's preflight and Bootstrap's reboot */
+body {
+  margin: 0;
+  font-family: var(--bs-body-font-family);
+  font-size: var(--bs-body-font-size);
+  font-weight: var(--bs-body-font-weight);
+  line-height: var(--bs-body-line-height);
+  color: var(--bs-body-color);
+  background-color: var(--bs-body-bg);
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Responsive utilities that work in both systems */
+@media (max-width: 767.98px) {
+  .card-body {
+    padding: 1rem !important;
+  }
+  
+  .container-fluid {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+}
+
+/* Helper classes for transition effects */
+.transition-all {
+  transition: all 0.3s ease !important;
+}
+
+.duration-300 {
+  transition-duration: 300ms !important;
+}
+
+/* Legacy browser support */
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+  /* IE10+ specific styles */
+  .card {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) !important;
+  }
+  
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+  }
+  
+  /* Fix flexbox issues in older browsers */
+  .d-flex {
+    display: -ms-flexbox !important;
+    display: flex !important;
+  }
+} 

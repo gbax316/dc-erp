@@ -1,0 +1,40 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ... existing models ...
+
+// Vows model
+model Vow {
+  id             String    @id @default(uuid())
+  first_name     String
+  surname        String
+  phone_number   String
+  email          String
+  currency       String    @default("NGN")
+  amount_vowed   Int
+  dc_chapter     String
+  country        String    @default("Nigeria")
+  state          String?
+  payment_status String    @default("pending")
+  amount_paid    Int?
+  payment_date   DateTime?
+  notes          String?
+  user_id        String?
+  user           User?     @relation(fields: [user_id], references: [id])
+  created_at     DateTime  @default(now())
+  updated_at     DateTime  @updatedAt
+
+  @@index([user_id])
+  @@index([email])
+  @@index([dc_chapter])
+  @@index([payment_status])
+} 

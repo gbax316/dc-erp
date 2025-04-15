@@ -1,0 +1,117 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: dc-erp-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: dc_erp
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - dc-erp-network
+
+  backend:
+    build:
+      context: .
+      dockerfile: ./apps/backend/Dockerfile
+    container_name: dc-erp-backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - NODE_ENV=production
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=dc_erp
+    ports:
+      - "4040:4000"
+    command: node dist/main
+    restart: unless-stopped
+    networks:
+      - dc-erp-network
+
+  admin:
+    build:
+      context: .
+      dockerfile: ./apps/admin/Dockerfile
+    container_name: dc-erp-admin
+    depends_on:
+      - backend
+    env_file:
+      - ./apps/admin/.env
+    environment:
+      - VITE_API_URL=http://backend:4000
+    ports:
+      - "3030:3000"
+    restart: unless-stopped
+    networks:
+      - dc-erp-network
+  
+  admin-dashboard:
+    build:
+      context: .
+      dockerfile: ./apps/admin-dashboard/Dockerfile
+    container_name: dc-erp-admin-dashboard
+    depends_on:
+      - backend
+    env_file:
+      - ./apps/admin-dashboard/.env.production
+    environment:
+      - VITE_API_URL=http://backend:4000
+    ports:
+      - "3033:80"
+    restart: unless-stopped
+    networks:
+      - dc-erp-network
+
+  frontend:
+    build:
+      context: .
+      dockerfile: ./apps/frontend/Dockerfile
+    container_name: dc-erp-frontend
+    depends_on:
+      - backend
+    env_file:
+      - ./apps/frontend/.env
+    environment:
+      - NEXT_PUBLIC_API_URL=http://backend:4000
+    ports:
+      - "3034:3000"
+    restart: unless-stopped
+    networks:
+      - dc-erp-network
+
+  public:
+    build:
+      context: .
+      dockerfile: ./apps/public/Dockerfile
+    container_name: dc-erp-public
+    depends_on:
+      - backend
+    env_file:
+      - ./apps/public/.env
+    environment:
+      - NEXT_PUBLIC_API_URL=http://backend:4000
+    ports:
+      - "3032:3000"
+    restart: unless-stopped
+    networks:
+      - dc-erp-network
+
+volumes:
+  postgres_data:
+
+networks:
+  dc-erp-network:
+    driver: bridge 

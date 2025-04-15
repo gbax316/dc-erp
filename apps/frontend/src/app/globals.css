@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary-color: #0284c7;
+}
+
+@layer base {
+  body {
+    @apply bg-white;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply px-4 py-2 rounded font-medium;
+  }
+  .btn-primary {
+    @apply bg-blue-600 text-white hover:bg-blue-700;
+  }
+} 
